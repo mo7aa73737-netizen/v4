@@ -1,16 +1,15 @@
 
-// YSK SALES Service Worker - Enhanced for Offline Functionality
-const CACHE_NAME = 'ysk-sales-v3-cache';
-const STATIC_CACHE = 'ysk-sales-static-v3';
-const DYNAMIC_CACHE = 'ysk-sales-dynamic-v3';
+// YSK SALES Service Worker - GitHub Pages Compatible
+const CACHE_NAME = 'ysk-sales-v4-cache';
+const STATIC_CACHE = 'ysk-sales-static-v4';
+const DYNAMIC_CACHE = 'ysk-sales-dynamic-v4';
 
 // Essential files for offline functionality
 const STATIC_FILES = [
-  '/YSK-SALES-V3/',
-  '/YSK-SALES-V3/index.html',
-  '/YSK-SALES-V3/manifest.json',
-  '/YSK-SALES-V3/YSK-SALES.png',
-  // Add other critical assets
+  '/v4/',
+  '/v4/index.html',
+  '/v4/manifest.json',
+  '/v4/YSK-SALES.png',
 ];
 
 // External resources to cache
@@ -113,7 +112,7 @@ self.addEventListener('fetch', event => {
       }).catch(() => {
         // Network failed, try to serve offline fallback
         if (request.destination === 'document') {
-          return caches.match('/YSK-SALES-V3/index.html');
+          return caches.match('/v4/index.html');
         }
         
         // For other resources, return a basic offline response
@@ -191,8 +190,8 @@ self.addEventListener('push', event => {
   
   const options = {
     body: event.data ? event.data.text() : 'إشعار جديد من YSK SALES',
-    icon: '/YSK-SALES-V3/YSK-SALES.png',
-    badge: '/YSK-SALES-V3/YSK-SALES.png',
+    icon: '/v4/YSK-SALES.png',
+    badge: '/v4/YSK-SALES.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -202,12 +201,12 @@ self.addEventListener('push', event => {
       {
         action: 'open',
         title: 'فتح التطبيق',
-        icon: '/YSK-SALES-V3/YSK-SALES.png'
+        icon: '/v4/YSK-SALES.png'
       },
       {
         action: 'close',
         title: 'إغلاق',
-        icon: '/YSK-SALES-V3/YSK-SALES.png'
+        icon: '/v4/YSK-SALES.png'
       }
     ],
     tag: 'ysk-sales',
@@ -228,7 +227,7 @@ self.addEventListener('notificationclick', event => {
   
   if (event.action === 'open' || !event.action) {
     event.waitUntil(
-      clients.openWindow('/YSK-SALES-V3/')
+      clients.openWindow('/v4/')
     );
   }
 });
