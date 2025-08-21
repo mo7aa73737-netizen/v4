@@ -7,9 +7,7 @@ const DYNAMIC_CACHE = 'ysk-sales-dynamic-v4';
 // Essential files for offline functionality
 const STATIC_FILES = [
   '/v4/',
-  '/v4/index.html',
-  '/v4/manifest.json',
-  '/v4/YSK-SALES.png',
+  '/v4/index.html'
 ];
 
 // External resources to cache
@@ -24,22 +22,37 @@ self.addEventListener('install', event => {
   console.log('🔧 YSK SALES Service Worker installing...');
   
   event.waitUntil(
-    Promise.all([
+    Promise.allSettled([
       // Cache static files
       caches.open(STATIC_CACHE).then(cache => {
         console.log('📦 Caching static files...');
-        return cache.addAll(STATIC_FILES);
+        return Promise.allSettled(
+          STATIC_FILES.map(url => 
+            cache.add(url).catch(err => {
+              console.warn(`Failed to cache ${url}:`, err);
+              return null;
+            })
+          )
+        );
       }),
       // Cache external resources
       caches.open(DYNAMIC_CACHE).then(cache => {
         console.log('🌐 Caching external resources...');
-        return cache.addAll(EXTERNAL_RESOURCES.map(url => new Request(url, { mode: 'cors' })));
+        return Promise.allSettled(
+          EXTERNAL_RESOURCES.map(url => 
+            cache.add(new Request(url, { mode: 'cors' })).catch(err => {
+              console.warn(`Failed to cache ${url}:`, err);
+              return null;
+            })
+          )
+        );
       })
     ]).then(() => {
       console.log('✅ YSK SALES Service Worker installed successfully');
       self.skipWaiting();
     }).catch(error => {
       console.error('❌ Service Worker installation failed:', error);
+      self.skipWaiting(); // Install anyway
     })
   );
 });
