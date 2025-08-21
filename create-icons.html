@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>إنشاء أيقونات PWA</title>
+</head>
+<body>
+    <h2>إنشاء أيقونات PWA بأحجام مختلفة</h2>
+    <canvas id="canvas" style="border: 1px solid #ccc;"></canvas>
+    <br><br>
+    <button onclick="createIcons()">إنشاء الأيقونات</button>
+    <div id="downloads"></div>
+
+    <script>
+        function createIcons() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+                const downloads = document.getElementById('downloads');
+                downloads.innerHTML = '<h3>اضغط على الروابط لتحميل الأيقونات:</h3>';
+                
+                sizes.forEach(size => {
+                    canvas.width = size;
+                    canvas.height = size;
+                    
+                    // رسم الصورة بالحجم الجديد
+                    ctx.drawImage(img, 0, 0, size, size);
+                    
+                    // تحويل إلى blob وإنشاء رابط تحميل
+                    canvas.toBlob(function(blob) {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `icon-${size}x${size}.png`;
+                        a.textContent = `تحميل أيقونة ${size}x${size}`;
+                        a.style.display = 'block';
+                        a.style.margin = '5px 0';
+                        downloads.appendChild(a);
+                    }, 'image/png');
+                });
+            };
+            
+            // تحميل الصورة الأصلية
+            img.src = 'YSK-SALES.png';
+        }
+    </script>
+</body>
+</html>

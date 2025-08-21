@@ -1,0 +1,39 @@
+
+{
+  "short_name": "YSK SALES",
+  "name": "YSK SALES | لإدارة المبيعات",
+  "description": "نظام متكامل لإدارة المبيعات والمخزون مع إمكانيات العمل بدون إنترنت",
+  "icons": [
+    {
+      "src": "/v4/YSK-SALES.png",
+      "type": "image/png",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/v4/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#1f2937",
+  "background_color": "#f3f4f6",
+  "scope": "/v4/",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["business", "productivity", "finance"],
+  "shortcuts": [
+    {
+      "name": "نقطة البيع",
+      "short_name": "POS",
+      "description": "فتح نقطة البيع مباشرة",
+      "url": "/v4/?page=pos",
+      "icons": [{ "src": "/v4/YSK-SALES.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "المنتجات",
+      "short_name": "Products",
+      "description": "إدارة المنتجات",
+      "url": "/v4/?page=products",
+      "icons": [{ "src": "/v4/YSK-SALES.png", "sizes": "96x96" }]
+    }
+  ]
+}

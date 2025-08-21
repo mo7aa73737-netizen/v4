@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد أيقونات PWA</title>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        .preview {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .preview img {
+            max-width: 200px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+            width: 200px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        .downloads {
+            margin-top: 30px;
+        }
+        .download-link {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .download-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .progress {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.3);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            background: white;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 مولد أيقونات PWA</h1>
+        
+        <div class="preview">
+            <img id="preview" src="public/YSK-SALES.png" alt="YSK SALES Logo">
+            <p>الأيقونة الأصلية</p>
+        </div>
+        
+        <button class="btn" onclick="generateIcons()">🚀 إنشاء جميع الأيقونات</button>
+        
+        <div class="progress" id="progress">
+            <p id="progressText">جاري إنشاء الأيقونات...</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="downloads" id="downloads"></div>
+    </div>
+    
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const sizes = [
+            { size: 72, name: 'icon-72x72.png' },
+            { size: 96, name: 'icon-96x96.png' },
+            { size: 128, name: 'icon-128x128.png' },
+            { size: 144, name: 'icon-144x144.png' },
+            { size: 152, name: 'icon-152x152.png' },
+            { size: 192, name: 'icon-192x192.png' },
+            { size: 384, name: 'icon-384x384.png' },
+            { size: 512, name: 'icon-512x512.png' }
+        ];
+
+        async function generateIcons() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            const progress = document.getElementById('progress');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const downloads = document.getElementById('downloads');
+            
+            progress.style.display = 'block';
+            downloads.innerHTML = '';
+            
+            img.onload = async function() {
+                downloads.innerHTML = '<h3>✅ تم إنشاء الأيقونات بنجاح! اضغط لتحميل:</h3>';
+                
+                for (let i = 0; i < sizes.length; i++) {
+                    const { size, name } = sizes[i];
+                    
+                    // تحديث شريط التقدم
+                    const progressPercent = ((i + 1) / sizes.length) * 100;
+                    progressFill.style.width = progressPercent + '%';
+                    progressText.textContent = `إنشاء أيقونة ${size}x${size}... (${i + 1}/${sizes.length})`;
+                    
+                    // إعداد Canvas
+                    canvas.width = size;
+                    canvas.height = size;
+                    
+                    // رسم الصورة بالحجم الجديد مع تحسين الجودة
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(img, 0, 0, size, size);
+                    
+                    // تحويل إلى blob وإنشاء رابط تحميل
+                    await new Promise(resolve => {
+                        canvas.toBlob(function(blob) {
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = name;
+                            a.className = 'download-link';
+                            a.textContent = `📱 ${name} (${size}x${size})`;
+                            downloads.appendChild(a);
+                            resolve();
+                        }, 'image/png', 1.0);
+                    });
+                    
+                    // انتظار قصير لتحديث الواج��ة
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                progressText.textContent = '🎉 تم إنشاء جميع الأيقونات بنجاح!';
+                
+                // إضافة تعليمات
+                const instructions = document.createElement('div');
+                instructions.innerHTML = `
+                    <div style="background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                        <h4>📋 تعليمات التثبيت:</h4>
+                        <ol style="text-align: right; line-height: 1.8;">
+                            <li>حمل جميع الأيقونات أعلاه</li>
+                            <li>ضعها في مجلد: <code>public/icons/</code></li>
+                            <li>تأكد من أن أسماء الملفات صحيحة</li>
+                            <li>قم ببناء المشروع: <code>npm run build</code></li>
+                            <li>اختبر PWA: <code>npm run preview</code></li>
+                        </ol>
+                        <p style="color: #ffeb3b; font-weight: bold;">
+                            💡 نصيحة: احفظ هذه الصفحة في المفضلة لاستخدامها مرة أخرى!
+                        </p>
+                    </div>
+                `;
+                downloads.appendChild(instructions);
+            };
+            
+            img.onerror = function() {
+                progressText.textContent = '❌ خطأ في تحميل الصورة!';
+                alert('تأكد من وجود الملف: public/YSK-SALES.png');
+            };
+            
+            // تحميل الصورة الأصلية
+            img.src = 'public/YSK-SALES.png';
+        }
+
+        // إضافة تأثيرات تفاعلية
+        document.addEventListener('DOMContentLoaded', function() {
+            const preview = document.getElementById('preview');
+            preview.addEventListener('click', function() {
+                this.style.transform = this.style.transform === 'scale(1.1)' ? 'scale(1)' : 'scale(1.1)';
+            });
+        });
+    </script>
+</body>
+</html>
