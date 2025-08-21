@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YSK SALES - غير متصل</title>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 500px;
+            margin: 1rem;
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2rem;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #667eea;
+            font-weight: bold;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .btn {
+            background: white;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        .features {
+            margin-top: 2rem;
+            text-align: right;
+        }
+        .feature {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .offline-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff4444;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-indicator">
+        🔴 غير متصل بالإنترنت
+    </div>
+    
+    <div class="container">
+        <div class="logo">YSK</div>
+        <h1>YSK SALES</h1>
+        <p>أنت الآن في وضع عدم الاتصال بالإنترنت</p>
+        <p>لا تقلق! يمكنك الاستمرار في استخدام التطبيق بكامل ميزاته:</p>
+        
+        <div class="features">
+            <div class="feature">✅ إدارة المنتجات والمخزون</div>
+            <div class="feature">✅ إنشاء فواتير البيع</div>
+            <div class="feature">✅ إدارة العملاء</div>
+            <div class="feature">✅ تسجيل المصاريف</div>
+            <div class="feature">✅ طباعة الفواتير</div>
+            <div class="feature">✅ جميع البيانات محفوظة محلياً</div>
+        </div>
+        
+        <p style="font-size: 0.9rem; margin-top: 2rem;">
+            عند عودة الاتصال بالإنترنت، سيتم مزامنة جميع البيانات تلقائياً
+        </p>
+        
+        <a href="/" class="btn">العودة للتطبيق</a>
+    </div>
+
+    <script>
+        // Check for online status
+        function updateOnlineStatus() {
+            const indicator = document.querySelector('.offline-indicator');
+            if (navigator.onLine) {
+                indicator.style.background = '#44ff44';
+                indicator.innerHTML = '🟢 متصل بالإنترنت';
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        
+        // Check every 5 seconds
+        setInterval(updateOnlineStatus, 5000);
+    </script>
+</body>
+</html>
